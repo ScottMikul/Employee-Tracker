@@ -1,0 +1,52 @@
+
+
+const mysql = require("mysql");
+
+const connection = mysql.createConnection({
+    host: "localhost",
+    port:"3306",
+    user: "root",
+    password: "root",
+    database:"company"}
+)
+
+
+
+function addDepartment(department){
+    connection.connect(function(err){
+        if(err) throw err;
+        connection.query(
+            `insert into department (name) values ("${department.name}")`,function(err){
+                if (err) {console.log(err)}
+                console.log("success");
+            });
+    });
+}
+//test addDepartment({name:"testDept"})
+function addRole(role){
+    connection.connect(function(err){
+        if(err) throw err;
+        connection.query(
+            `insert into role (departmentId, title, salary) values (?,?,?)`, [role.departmentId, role.title, role.salary],function(err){
+                if (err) {console.log(err)}
+                console.log("success");
+            });
+    })
+}
+//test: addRole({departmentId:1, title: "greeter", salary: 14000.00})
+
+//insert into employee (roleid, managerid, first_name,last_name) values (8, null, "man" , "ager") , ( 7, 1, "Scott","Mikul");
+function addEmployee(employee){
+    connection.connect(function(err){
+        if(err) throw err;
+        connection.query(
+            `
+            insert into employee (roleid, managerid, first_name,last_name) values (?, ?, ? , ?)`, [employee.roleid, employee.managerid, employee.first_name, employee.last_name],function(err){
+                if (err) {console.log(err)}
+                console.log("success");
+            });
+        console.log("connected");
+    })
+}
+
+//test addEmployee({roleid:5,managerid:null,first_name:"man a ", last_name:"ger"})
